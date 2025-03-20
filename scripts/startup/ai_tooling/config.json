@@ -1,0 +1,32 @@
+{
+  "active_environment": "prod",
+  "environments": {
+    "prod": {
+      "api_base_url": "https://6tnhbhc320.execute-api.eu-north-1.amazonaws.com/Prod/",
+      "cognito": {
+        "domain": "https://eu-north-1iqbujzqwz.auth.eu-north-1.amazoncognito.com",
+        "client_id": "2smi96jjd1vb97i0edvdupl1c8",
+        "redirect_uri": "http://localhost:8080/callback",
+        "scopes": "openid email phone",
+        "local_port": 8080
+      },
+      "auth_token_filename": "auth_tokens.json",
+      "cache_filename": "ai_copilot_cache.json",
+      "cache_max_history": 200
+    },
+    "staging": {
+        "api_base_url": "https://d1zufqu5vl.execute-api.eu-north-1.amazonaws.com/Staging/",
+        "cognito": {
+          "domain": "https://eu-north-1iqbujzqwz.auth.eu-north-1.amazoncognito.com",
+          "client_id": "2smi96jjd1vb97i0edvdupl1c8",
+          "redirect_uri": "http://localhost:8080/callback",
+          "scopes": "openid email phone",
+          "local_port": 8080
+        },
+        "auth_token_filename": "auth_tokens.json",
+        "cache_filename": "ai_copilot_cache.json",
+        "cache_max_history": 200
+    }
+   
+  }
+} 

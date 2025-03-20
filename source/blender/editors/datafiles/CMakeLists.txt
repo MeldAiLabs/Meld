@@ -854,6 +854,7 @@ if(WITH_BLENDER)
       time
       tool_settings
       topbar
+      sidebar
       tpaint_hlt
       tracker
       tracker_data

@@ -4462,6 +4462,19 @@ static void rna_def_userdef_theme_space_topbar(BlenderRNA *brna)
   rna_def_userdef_theme_spaces_main(srna);
 }
 
+static void rna_def_userdef_theme_space_sidebar(BlenderRNA *brna)
+{
+  StructRNA *srna;
+
+  /* space_sidebar */
+
+  srna = RNA_def_struct(brna, "ThemeSideBar", nullptr);
+  RNA_def_struct_sdna(srna, "ThemeSpace");
+  RNA_def_struct_ui_text(srna, "Theme Side Bar", "Theme settings for the Side Bar");
+
+  rna_def_userdef_theme_spaces_main(srna);
+}
+
 static void rna_def_userdef_theme_space_statusbar(BlenderRNA *brna)
 {
   StructRNA *srna;
@@ -4520,6 +4533,7 @@ static void rna_def_userdef_themes(BlenderRNA *brna)
       {22, "STATUSBAR", ICON_STATUSBAR, "Status Bar", ""},
       {8, "TEXT_EDITOR", ICON_TEXT, "Text Editor", ""},
       {21, "TOPBAR", ICON_TOPBAR, "Top Bar", ""},
+      {24, "SIDEBAR", ICON_SIDEBAR, "Side Bar", ""},
       {7, "SEQUENCE_EDITOR", ICON_SEQUENCE, "Video Sequencer", ""},
       {18, "BONE_COLOR_SETS", ICON_COLOR, "Bone Color Sets", ""},
       {0, nullptr, 0, nullptr, nullptr},
@@ -4652,6 +4666,12 @@ static void rna_def_userdef_themes(BlenderRNA *brna)
   RNA_def_property_pointer_sdna(prop, nullptr, "space_topbar");
   RNA_def_property_struct_type(prop, "ThemeTopBar");
   RNA_def_property_ui_text(prop, "Top Bar", "");
+
+  prop = RNA_def_property(srna, "sidebar", PROP_POINTER, PROP_NONE);
+  RNA_def_property_flag(prop, PROP_NEVER_NULL);
+  RNA_def_property_pointer_sdna(prop, nullptr, "space_sidebar");
+  RNA_def_property_struct_type(prop, "ThemeSideBar");
+  RNA_def_property_ui_text(prop, "Side Bar", "");
 
   prop = RNA_def_property(srna, "statusbar", PROP_POINTER, PROP_NONE);
   RNA_def_property_flag(prop, PROP_NEVER_NULL);
@@ -4901,6 +4921,7 @@ static void rna_def_userdef_dothemes(BlenderRNA *brna)
   rna_def_userdef_theme_space_console(brna);
   rna_def_userdef_theme_space_clip(brna);
   rna_def_userdef_theme_space_topbar(brna);
+  rna_def_userdef_theme_space_sidebar(brna);
   rna_def_userdef_theme_space_statusbar(brna);
   rna_def_userdef_theme_space_spreadsheet(brna);
   rna_def_userdef_theme_colorset(brna);

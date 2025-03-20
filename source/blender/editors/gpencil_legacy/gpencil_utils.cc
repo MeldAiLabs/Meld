@@ -97,6 +97,7 @@ bGPdata **ED_annotation_data_get_pointers_direct(ID *screen_id,
       }
 
       case SPACE_TOPBAR:     /* Top-bar */
+      case SPACE_SIDEBAR:    /* Side-bar */
       case SPACE_VIEW3D:     /* 3D-View */
       case SPACE_PROPERTIES: /* properties */
       {

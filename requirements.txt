@@ -1,0 +1,4 @@
+fake-bpy-module
+black  # for code formatting
+pylint  # for linting
+langchain

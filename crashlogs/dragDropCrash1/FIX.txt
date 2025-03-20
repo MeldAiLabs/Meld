@@ -1,0 +1,16 @@
+The reason was that the space type was not incremented after 
+#endif
+  SPACE_CONSOLE = 18,
+  SPACE_USERPREF = 19,
+  SPACE_CLIP = 20,
+  SPACE_TOPBAR = 21,
+  SPACE_STATUSBAR = 22,
+  SPACE_SPREADSHEET = 23,
+  SPACE_SIDEBAR = 24,
+
+#define SPACE_TYPE_NUM (SPACE_SPREADSHEET + 1)
+} eSpace_Type;
+
+So the code had an exception crash.
+
+:> 

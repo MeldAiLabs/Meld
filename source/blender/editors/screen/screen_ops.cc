@@ -1571,7 +1571,7 @@ static int area_close_exec(bContext *C, wmOperator *op)
 
   /* Ensure the event loop doesn't attempt to continue handling events.
    *
-   * This causes execution from the Python console fail to return to the prompt as it should.
+   * This causes execution f rom the Python console fail to return to the prompt as it should.
    * This glitch could be solved in the event loop handling as other operators may also
    * destructively manipulate windowing data. */
   CTX_wm_window_set(C, nullptr);
@@ -4914,7 +4914,7 @@ static bool region_toggle_poll(bContext *C)
   ScrArea *area = CTX_wm_area(C);
 
   /* Don't flip anything around in top-bar. */
-  if (area && area->spacetype == SPACE_TOPBAR) {
+  if (area && area->spacetype == SPACE_TOPBAR || area->spacetype == SPACE_SIDEBAR) {
     CTX_wm_operator_poll_msg_set(C, "Toggling regions in the Top-bar is not allowed");
     return false;
   }
@@ -4982,7 +4982,7 @@ static bool region_flip_poll(bContext *C)
   ScrArea *area = CTX_wm_area(C);
 
   /* Don't flip anything around in top-bar. */
-  if (area && area->spacetype == SPACE_TOPBAR) {
+  if (area && (area->spacetype == SPACE_TOPBAR || area->spacetype == SPACE_SIDEBAR)) {
     CTX_wm_operator_poll_msg_set(C, "Flipping regions in the Top-bar is not allowed");
     return false;
   }
@@ -5088,7 +5088,7 @@ void ED_screens_header_tools_menu_create(bContext *C, uiLayout *layout, void * /
   {
     PointerRNA ptr = RNA_pointer_create_discrete(
         (ID *)CTX_wm_screen(C), &RNA_Space, area->spacedata.first);
-    if (!ELEM(area->spacetype, SPACE_TOPBAR)) {
+    if (!ELEM(area->spacetype, SPACE_TOPBAR) || !ELEM(area->spacetype, SPACE_SIDEBAR)) {
       uiItemR(layout, &ptr, "show_region_header", UI_ITEM_NONE, IFACE_("Show Header"), ICON_NONE);
     }
 
@@ -5111,7 +5111,7 @@ void ED_screens_header_tools_menu_create(bContext *C, uiLayout *layout, void * /
             "SCREEN_OT_header_toggle_menus");
   }
 
-  if (!ELEM(area->spacetype, SPACE_TOPBAR)) {
+  if (!ELEM(area->spacetype, SPACE_TOPBAR) || !ELEM(area->spacetype, SPACE_SIDEBAR)) {
     uiItemS(layout);
     ED_screens_region_flip_menu_create(C, layout, nullptr);
     uiItemS(layout);
@@ -6384,7 +6384,7 @@ static void SCREEN_OT_region_blend(wmOperatorType *ot)
 static bool space_type_set_or_cycle_poll(bContext *C)
 {
   ScrArea *area = CTX_wm_area(C);
-  return (area && !ELEM(area->spacetype, SPACE_TOPBAR, SPACE_STATUSBAR));
+  return (area && !ELEM(area->spacetype, SPACE_TOPBAR, SPACE_SIDEBAR, SPACE_STATUSBAR));
 }
 
 static int space_type_set_or_cycle_exec(bContext *C, wmOperator *op)
@@ -6594,6 +6594,22 @@ static void SCREEN_OT_workspace_cycle(wmOperatorType *ot)
 
 /** \} */
 
+/* Add a new operator for toggling */
+static bool g_sidebar_visible = true;  // Default to visible
+
+bool ED_sidebar_is_visible()
+{
+  return g_sidebar_visible;
+}
+
+void ED_sidebar_toggle_visibility(bScreen *screen)
+{
+  g_sidebar_visible = !g_sidebar_visible;
+  screen->do_refresh = true;
+}
+
+/** \} */
+
 /* -------------------------------------------------------------------- */
 /** \name Assigning Operator Types
  * \{ */
@@ -6707,5 +6723,3 @@ void ED_keymap_screen(wmKeyConfig *keyconf)
 
   keymap_modal_set(keyconf);
 }
-
-/** \} */

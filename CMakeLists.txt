@@ -187,7 +187,7 @@ if(WIN32)
     # there really is no nice way to get this information consistent without a global define.
     -DBLENDER_WIN_APPID="blender.${BLENDER_VERSION_MAJOR}.${BLENDER_VERSION_MINOR}"
     # This is the name that will be shown in the taskbar and OpenWith windows UI
-    -DBLENDER_WIN_APPID_FRIENDLY_NAME="Blender ${BLENDER_VERSION_MAJOR}.${BLENDER_VERSION_MINOR}"
+    -DBLENDER_WIN_APPID_FRIENDLY_NAME="Meld"
   )
 endif()
 

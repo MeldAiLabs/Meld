@@ -6,10 +6,10 @@
     RequiredVersion="3.6.3303.0">
 
     <Product Id="$(var.CPACK_WIX_PRODUCT_GUID)"
-        Name="$(var.CPACK_PACKAGE_NAME)"
+        Name="Meld"
         Language="1033"
         Version="$(var.CPACK_PACKAGE_VERSION)"
-        Manufacturer="$(var.CPACK_PACKAGE_VENDOR)"
+        Manufacturer="Meld Team"
         UpgradeCode="$(var.CPACK_WIX_UPGRADE_GUID)">
 
         <Package InstallerVersion="301" Compressed="yes"/>
@@ -25,7 +25,7 @@
 
         <WixVariable Id="WixUILicenseRtf" Value="$(var.CPACK_WIX_LICENSE_RTF)"/>
         <Property Id="WIXUI_INSTALLDIR" Value="INSTALL_ROOT"/>
-
+        
         <?ifdef CPACK_WIX_PRODUCT_ICON?>
         <Property Id="ARPPRODUCTICON">ProductIcon.ico</Property>
         <Icon Id="ProductIcon.ico" SourceFile="$(var.CPACK_WIX_PRODUCT_ICON)"/>
@@ -39,45 +39,85 @@
         <WixVariable Id="WixUIDialogBmp" Value="$(var.CPACK_WIX_UI_DIALOG)"/>
         <?endif?>
 
-        <FeatureRef Id="ProductFeature"/>
+        <!-- Create our application folder within the ProgramMenuFolder (Start Menu) -->
+        <DirectoryRef Id="ProgramMenuFolder">
+            <Directory Id="ApplicationProgramsFolder" Name="Meld"/>
+        </DirectoryRef>
+
+        <!-- Step 2: Add the shortcut to the installer package -->
+        <DirectoryRef Id="ApplicationProgramsFolder">
+            <Component Id="ApplicationShortcut" Guid="*">
+                <Shortcut Id="ApplicationStartMenuShortcut"
+                          Name="Meld"
+                          Description="Supercharge Blender with AI"
+                          Target="[INSTALL_ROOT]Meld.exe"
+                          WorkingDirectory="INSTALL_ROOT"/>
+                <RemoveFolder Id="ApplicationProgramsFolder" On="uninstall"/>
+                <RegistryValue Root="HKCU" Key="Software\Meld" Name="installed" Type="integer" Value="1" KeyPath="yes"/>
+            </Component>
+        </DirectoryRef>
+
+        <!-- Add desktop shortcut -->
+        <DirectoryRef Id="DesktopFolder">
+            <Component Id="DesktopShortcut" Guid="*">
+                <Shortcut Id="ApplicationDesktopShortcut"
+                          Name="Meld"
+                          Description="Supercharge Blender with AI"
+                          Target="[INSTALL_ROOT]Meld.exe"
+                          WorkingDirectory="INSTALL_ROOT"/>
+                <RegistryValue Root="HKCU" Key="Software\Meld" Name="desktop_shortcut" Type="integer" Value="1" KeyPath="yes"/>
+            </Component>
+        </DirectoryRef>
+
+        <FeatureRef Id="ProductFeature">
+            <!-- Step 3: Tell WiX to install the shortcuts -->
+            <ComponentRef Id="ApplicationShortcut" />
+            <ComponentRef Id="DesktopShortcut" />
+        </FeatureRef>
 
         <UIRef Id="$(var.CPACK_WIX_UI_REF)" />
 
         <?include "properties.wxi"?>
         <UI>
+            <!-- Add launch application option on exit dialog -->
             <Publish Dialog="ExitDialog" 
-                Control="Finish" 
-                Event="DoAction" 
-                Value="LaunchBrowser">WIXUI_EXITDIALOGOPTIONALCHECKBOX = 1 and NOT Installed</Publish>
-            <ProgressText Action="RegisterBlender">Registering Blender</ProgressText>
+                    Control="Finish" 
+                    Event="DoAction" 
+                    Value="LaunchApplication">WIXUI_EXITDIALOGOPTIONALCHECKBOX = 1 and NOT Installed</Publish>
+            
+            <!-- Show text explaining shortcut creation -->
+            <Property Id="WIXUI_EXITDIALOGOPTIONALTEXT" Value="A desktop shortcut has been created for your convenience." />
+            
+            <ProgressText Action="RegisterMeld">Registering Meld file types</ProgressText>
         </UI>
-        <Property Id="WIXUI_EXITDIALOGOPTIONALCHECKBOXTEXT" Value="Learn how to support Blender" />
-        <Property Id="WIXUI_EXITDIALOGOPTIONALCHECKBOX" Value="1" />
-        <SetProperty Id="REINSTALLMODE" Value="amus" Before="FindRelatedProducts" Sequence="first">NOT REINSTALLMODE</SetProperty>
         
+        <!-- Option to launch application when setup completes -->
+        <Property Id="WIXUI_EXITDIALOGOPTIONALCHECKBOXTEXT" Value="Launch Meld now" />
+        <Property Id="WIXUI_EXITDIALOGOPTIONALCHECKBOX" Value="1" />
         <UIRef Id="WixUI_ErrorProgressText" />
-        <CustomAction Id="LaunchBrowser"
-             ExeCommand="explorer.exe &quot;https://fund.blender.org/?utm_source=blender-$(var.CPACK_PACKAGE_VERSION)-installer-msi&quot;"
+        
+        <!-- Action to launch the application -->
+        <CustomAction Id="LaunchApplication"
+             ExeCommand="[INSTALL_ROOT]Meld.exe"
              Directory="INSTALL_ROOT"
-              Return="asyncNoWait" >
-           REMOVE="ALL"
-        </CustomAction>
-        <CustomAction Id="RegisterBlender" 
+             Return="asyncNoWait" />
+             
+        <CustomAction Id="RegisterMeld" 
                       Impersonate="no"
                       Execute="deferred"
-                      FileKey="CM_FP_Blender.blender_launcher.exe"
+                      FileKey="CM_FP_Blender.Meld_launcher.exe"
                       ExeCommand="--register-allusers"
                       Return="ignore" />
-        <CustomAction Id="UnRegisterBlender" 
+        <CustomAction Id="UnRegisterMeld" 
                       Impersonate="no"
                       Execute="deferred"
-                      FileKey="CM_FP_Blender.blender_launcher.exe"
+                      FileKey="CM_FP_Blender.Meld_launcher.exe"
                       ExeCommand="--unregister-allusers"
                       Return="ignore" />
         <InstallExecuteSequence>
-            <Custom Action="RegisterBlender" After="InstallFiles" />
+            <Custom Action="RegisterMeld" After="InstallFiles" />
             <!-- https://stackoverflow.com/questions/320921/how-to-add-a-wix-custom-action-that-happens-only-on-uninstall-via-msi -->
-            <Custom Action="UnRegisterBlender" Before="RemoveFiles">(NOT UPGRADINGPRODUCTCODE) AND (REMOVE="ALL")</Custom>
+            <Custom Action="UnRegisterMeld" Before="RemoveFiles">(NOT UPGRADINGPRODUCTCODE) AND (REMOVE="ALL")</Custom>
         </InstallExecuteSequence>
     </Product>
 </Wix>

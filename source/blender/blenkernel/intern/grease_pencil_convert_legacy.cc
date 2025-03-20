@@ -3055,6 +3055,7 @@ static void legacy_gpencil_sanitize_annotations(Main &bmain)
           case SPACE_USERPREF:
           case SPACE_CLIP:
           case SPACE_TOPBAR:
+          case SPACE_SIDEBAR:
           case SPACE_STATUSBAR:
           case SPACE_SPREADSHEET:
             break;

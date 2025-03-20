@@ -590,7 +590,7 @@ static void arg_py_context_restore(bContext *C, BlendePyContextStore *c_py)
 
 static void print_version_full()
 {
-  printf("Blender %s\n", BKE_blender_version_string());
+  printf("Meld %s\n", BKE_blender_version_string());
 #  ifdef BUILD_DATE
   printf("\tbuild date: %s\n", build_date);
   printf("\tbuild time: %s\n", build_time);
@@ -612,13 +612,13 @@ static void print_version_short()
 #  ifdef BUILD_DATE
   /* NOTE: We include built time since sometimes we need to tell broken from
    * working built of the same hash. */
-  printf("Blender %s (hash %s built %s %s)\n",
+  printf("Meld %s (hash %s built %s %s)\n",
          BKE_blender_version_string(),
          build_hash,
          build_date,
          build_time);
 #  else
-  printf("Blender %s\n", BKE_blender_version_string());
+  printf("Meld %s\n", BKE_blender_version_string());
 #  endif
 }
 
@@ -643,7 +643,7 @@ static void print_help(bArgs *ba, bool all)
 
 #  define PRINT(...) BLI_args_printf(ba, __VA_ARGS__)
 
-  PRINT("Blender %s\n", BKE_blender_version_string());
+  PRINT("Meld %s\n", BKE_blender_version_string());
   PRINT("Usage: blender [args ...] [file] [args ...]\n");
   PRINT("\n");
 

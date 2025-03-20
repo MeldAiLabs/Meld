@@ -1,0 +1,42 @@
+[MASTER]
+# Add paths to your virtual environment packages
+; init-hook='import sys; sys.path.append("/Users/sungeunchoi/projects/blender/lib/macos_arm64/python/lib/python3.11/site-packages")'
+
+# List of plugins to load
+load-plugins=
+
+[MESSAGES CONTROL]
+# Disable specific warnings
+disable=
+    C0301,  # line-too-long
+    W0122,  # exec-used (needed for Blender code execution)
+    C0415,
+    W0404,
+    W0621,
+    C0103, # Blender doesnt use pascal case
+    W0718,
+    W0603,
+    C0302,
+    I1101,
+    W0602
+
+[FORMAT]
+# Maximum number of characters on a single line (not enforced due to disable=C0301)
+max-line-length=100
+
+[BASIC]
+# Regular expression which should only match function or class names
+; function-rgx=[a-z_][a-z0-9_]{2,50}$
+; variable-rgx=[a-z_][a-z0-9_]{2,50}$
+; const-rgx=(([A-Z_][A-Z0-9_]*)|(__.*__))$
+; attr-rgx=[a-z_][a-z0-9_]{2,50}$
+; argument-rgx=[a-z_][a-z0-9_]{2,50}$
+; class-rgx=[A-Z_][a-zA-Z0-9]+$
+; module-rgx=(([a-z_][a-z0-9_]*)|([A-Z][a-zA-Z0-9]+))$
+
+[REPORTS]
+# Set the output format
+output-format=text
+
+# Include a brief explanation of each error
+msg-template={path}:{line}: [{msg_id}({symbol}), {obj}] {msg}

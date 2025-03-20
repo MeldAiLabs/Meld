@@ -431,9 +431,9 @@ void WM_OT_splash(wmOperatorType *ot)
 
 static uiBlock *wm_block_about_create(bContext *C, ARegion *region, void * /*arg*/)
 {
-  constexpr bool show_color = false;
+  constexpr bool show_color = true;
   const uiStyle *style = UI_style_get_dpi();
-  const int dialog_width = style->widget.points * 42 * UI_SCALE_FAC;
+  const int dialog_width = style->widget.points * 21 * UI_SCALE_FAC;
 
   uiBlock *block = UI_block_begin(C, region, "about", UI_EMBOSS);
 
@@ -446,7 +446,7 @@ static uiBlock *wm_block_about_create(bContext *C, ARegion *region, void * /*arg
 /* Blender logo. */
 #ifndef WITH_HEADLESS
 
-  float size = 0.2f * dialog_width;
+  float size = dialog_width;
 
   ImBuf *ibuf = UI_svg_icon_bitmap(ICON_BLENDER_LOGO_LARGE, size, show_color);
 
@@ -471,7 +471,7 @@ static uiBlock *wm_block_about_create(bContext *C, ARegion *region, void * /*arg
 
   uiLayout *col = uiLayoutColumn(layout, true);
 
-  uiItemL_ex(col, IFACE_("Blender"), ICON_NONE, true, false);
+  uiItemL_ex(col, IFACE_("Meld"), ICON_NONE, true, false);
 
   MenuType *mt = WM_menutype_find("WM_MT_splash_about", true);
   if (mt) {
@@ -492,9 +492,9 @@ static int wm_splash_about_invoke(bContext *C, wmOperator * /*op*/, const wmEven
 
 void WM_OT_splash_about(wmOperatorType *ot)
 {
-  ot->name = "About Blender";
+  ot->name = "About Meld";
   ot->idname = "WM_OT_splash_about";
-  ot->description = "Open a window with information about Blender";
+  ot->description = "Open a window with information about Meld";
 
   ot->invoke = wm_splash_about_invoke;
   ot->poll = WM_operator_winactive;

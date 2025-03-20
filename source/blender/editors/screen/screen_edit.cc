@@ -1302,6 +1302,26 @@ static void screen_global_statusbar_area_refresh(wmWindow *win, bScreen *screen)
   screen_global_area_refresh(
       win, screen, SPACE_STATUSBAR, GLOBAL_AREA_ALIGN_BOTTOM, &rect, size, size_min, size_max);
 }
+static void screen_global_sidebar_area_refresh(wmWindow *win, bScreen *screen)
+{
+  const blender::int2 win_size = WM_window_native_pixel_size(win);
+  const short size = UI_UNIT_X * 26;
+  const short header_size = screen_global_header_size();
+  rcti rect;
+
+  // Initialize rect to full window size
+  BLI_rcti_init(&rect, 0, win_size[0] - 1, 0, win_size[1] - 1);
+
+  // Adjust for topbar and statusbar
+  rect.ymin += (screen->flag & SCREEN_COLLAPSE_STATUSBAR) ? 1 : header_size;
+  rect.ymax -= header_size;  // Subtract topbar height
+
+  // Position on right side
+  rect.xmin = rect.xmax - size;
+
+  screen_global_area_refresh(
+      win, screen, SPACE_SIDEBAR, GLOBAL_AREA_ALIGN_RIGHT, &rect, size, size, size);
+}
 
 void ED_screen_global_areas_sync(wmWindow *win)
 {
@@ -1334,6 +1354,7 @@ void ED_screen_global_areas_refresh(wmWindow *win)
 
   screen_global_topbar_area_refresh(win, screen);
   screen_global_statusbar_area_refresh(win, screen);
+  screen_global_sidebar_area_refresh(win, screen);
 }
 
 /* -------------------------------------------------------------------- */

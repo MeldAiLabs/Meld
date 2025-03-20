@@ -49,6 +49,8 @@ static SpaceLink *topbar_create(const ScrArea * /*area*/, const Scene * /*scene*
   BLI_addtail(&stopbar->regionbase, region);
   region->regiontype = RGN_TYPE_HEADER;
   region->alignment = RGN_ALIGN_TOP;
+
+  /* Bottom control region (optional) */
   region = BKE_area_region_new();
   BLI_addtail(&stopbar->regionbase, region);
   region->regiontype = RGN_TYPE_HEADER;
@@ -102,6 +104,7 @@ static void topbar_header_region_init(wmWindowManager * /*wm*/, ARegion *region)
   if (RGN_ALIGN_ENUM_FROM_MASK(region->alignment) == RGN_ALIGN_RIGHT) {
     region->flag |= RGN_FLAG_DYNAMIC_SIZE;
   }
+
   ED_region_header_init(region);
 }
 
@@ -300,7 +303,6 @@ void ED_spacetype_topbar()
   art->keymapflag = ED_KEYMAP_UI | ED_KEYMAP_VIEW2D | ED_KEYMAP_HEADER;
 
   BLI_addhead(&st->regiontypes, art);
-
   /* regions: header */
   art = static_cast<ARegionType *>(
       MEM_callocN(sizeof(ARegionType), "spacetype topbar header region"));

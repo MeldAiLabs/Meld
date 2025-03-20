@@ -1,6 +1,8 @@
 # generic files to ignore
+venv/*
 .*
-
+build_darwin/
+venv/
 # python temp paths
 __pycache__/
 *.py[cod]

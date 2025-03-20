@@ -54,11 +54,11 @@ BEGIN
     BEGIN
       VALUE "FileVersion", BLEN_VER_RC_STR
       VALUE "ProductVersion", BLEN_VER_RC_STR
-      VALUE "CompanyName", "Blender Foundation"
-      VALUE "FileDescription", "Blender"
-      VALUE "LegalCopyright", "GPLv3 (Blender Foundation)"
-      VALUE "OriginalFilename", "blender.exe"
-      VALUE "ProductName", "Blender"
+      VALUE "CompanyName", "Meld Team"
+      VALUE "FileDescription", "Meld"
+      VALUE "LegalCopyright", "GPLv3 (Meld Team)"
+      VALUE "OriginalFilename", "meld.exe"
+      VALUE "ProductName", "Meld"
     END
   END
   BLOCK "VarFileInfo"

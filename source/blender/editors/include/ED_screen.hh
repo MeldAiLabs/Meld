@@ -250,6 +250,7 @@ int ED_area_footersize();
  * \return the final height of a global \a area, accounting for DPI.
  */
 int ED_area_global_size_y(const ScrArea *area);
+int ED_area_global_size_x(const ScrArea *area);
 int ED_area_global_min_size_y(const ScrArea *area);
 int ED_area_global_max_size_y(const ScrArea *area);
 bool ED_area_is_global(const ScrArea *area);
@@ -748,3 +749,6 @@ enum eScreenCycle {
   SPACE_CONTEXT_CYCLE_PREV,
   SPACE_CONTEXT_CYCLE_NEXT,
 };
+
+void ED_sidebar_toggle_visibility(bScreen *screen);
+bool ED_sidebar_is_visible(void);

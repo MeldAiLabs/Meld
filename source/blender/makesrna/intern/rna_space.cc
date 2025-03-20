@@ -128,6 +128,12 @@ const EnumPropertyItem rna_enum_space_type_items[] = {
      "Top Bar",
      "Global bar at the top of the screen for "
      "global per-window settings"},
+    {SPACE_SIDEBAR,
+     "SIDEBAR",
+     ICON_NONE,
+     "Side Bar",
+     "Global bar at the top of the screen for "
+     "global per-window settings"},
     {SPACE_STATUSBAR,
      "STATUSBAR",
      ICON_NONE,
@@ -629,6 +635,7 @@ static StructRNA *rna_Space_refine(PointerRNA *ptr)
     case SPACE_EMPTY:
     case SPACE_TOPBAR:
     case SPACE_STATUSBAR:
+    case SPACE_SIDEBAR:
       break;
   }
 

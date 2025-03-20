@@ -60,6 +60,7 @@ struct SpaceSeq;
 struct SpaceSpreadsheet;
 struct SpaceText;
 struct SpaceTopBar;
+struct SpaceSideBar;
 struct SpaceUserPref;
 struct StructRNA;
 struct Text;
@@ -221,6 +222,7 @@ SpaceInfo *CTX_wm_space_info(const bContext *C);
 SpaceUserPref *CTX_wm_space_userpref(const bContext *C);
 SpaceClip *CTX_wm_space_clip(const bContext *C);
 SpaceTopBar *CTX_wm_space_topbar(const bContext *C);
+SpaceSideBar *CTX_wm_space_sidebar(const bContext *C);
 SpaceSpreadsheet *CTX_wm_space_spreadsheet(const bContext *C);
 
 void CTX_wm_manager_set(bContext *C, wmWindowManager *wm);

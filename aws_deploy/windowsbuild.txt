@@ -1,0 +1,3 @@
+ cpack -G WIX -C Release
+
+ use make ninja as well

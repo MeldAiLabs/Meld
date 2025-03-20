@@ -4,10 +4,10 @@
 
 string(TIMESTAMP CURRENT_YEAR "%Y")
 
-set(PROJECT_DESCRIPTION  "Blender is the free and open source 3D creation suite software.")
-set(PROJECT_COPYRIGHT    "Copyright (C) 2001-${CURRENT_YEAR} Blender Authors")
-set(PROJECT_CONTACT      "foundation@blender.org")
-set(PROJECT_VENDOR       "Blender Foundation")
+set(PROJECT_DESCRIPTION  "Meld is the AI supercharged version of Blender")
+set(PROJECT_COPYRIGHT    "Copyright (C) {CURRENT_YEAR} Meld Authors")
+set(PROJECT_CONTACT      "x.com/meld")
+set(PROJECT_VENDOR       "Meld")
 
 set(MAJOR_VERSION ${BLENDER_VERSION_MAJOR})
 set(MINOR_VERSION ${BLENDER_VERSION_MINOR})
@@ -45,7 +45,7 @@ unset(MY_WC_HASH)
 
 # Force Package Name
 execute_process(COMMAND date "+%Y%m%d" OUTPUT_VARIABLE CPACK_DATE OUTPUT_STRIP_TRAILING_WHITESPACE)
-string(TOLOWER ${PROJECT_NAME} PROJECT_NAME_LOWER)
+string(TOLOWER "Meld" PROJECT_NAME_LOWER)
 if(MSVC)
   if("${CMAKE_SIZEOF_VOID_P}" EQUAL "8")
     set(PACKAGE_ARCH windows64)
@@ -59,7 +59,7 @@ endif()
 if(CPACK_OVERRIDE_PACKAGENAME)
   set(CPACK_PACKAGE_FILE_NAME ${CPACK_OVERRIDE_PACKAGENAME}-${PACKAGE_ARCH})
 else()
-  set(CPACK_PACKAGE_FILE_NAME ${PROJECT_NAME_LOWER}-${MAJOR_VERSION}.${MINOR_VERSION}.${PATCH_VERSION}-git${CPACK_DATE}.${BUILD_REV}-${PACKAGE_ARCH})
+  set(CPACK_PACKAGE_FILE_NAME meld-${MAJOR_VERSION}.${MINOR_VERSION}.${PATCH_VERSION}-git${CPACK_DATE}.${BUILD_REV}-${PACKAGE_ARCH})
 endif()
 
 if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
@@ -86,8 +86,8 @@ if(APPLE)
 endif()
 
 if(WIN32)
-  set(CPACK_PACKAGE_INSTALL_DIRECTORY "Blender Foundation/Blender ${MAJOR_VERSION}.${MINOR_VERSION}")
-  set(CPACK_PACKAGE_INSTALL_REGISTRY_KEY "Blender Foundation/Blender ${MAJOR_VERSION}.${MINOR_VERSION}")
+  set(CPACK_PACKAGE_INSTALL_DIRECTORY "Meld/${CPACK_PACKAGE_NAME} ${MAJOR_VERSION}.${MINOR_VERSION}")
+  set(CPACK_PACKAGE_INSTALL_REGISTRY_KEY "Meld/${CPACK_PACKAGE_NAME} ${MAJOR_VERSION}.${MINOR_VERSION}")
 
   set(CPACK_NSIS_MUI_ICON ${CMAKE_SOURCE_DIR}/release/windows/icons/winblender.ico)
   set(CPACK_NSIS_COMPRESSOR "/SOLID lzma")
@@ -107,14 +107,14 @@ if(WIN32)
 
   set(CPACK_WIX_TEMPLATE ${CMAKE_SOURCE_DIR}/release/windows/installer_wix/WIX.template)
   set(CPACK_WIX_UI_BANNER ${CMAKE_SOURCE_DIR}/release/windows/installer_wix/WIX_UI_BANNER.bmp)
-  set(CPACK_WIX_UI_DIALOG ${CMAKE_SOURCE_DIR}/release/windows/installer_wix/WIX_UI_DIALOG.png)
+  set(CPACK_WIX_UI_DIALOG ${CMAKE_SOURCE_DIR}/release/windows/installer_wix/WIX_UI_DIALOG.bmp)
   set(CPACK_WIX_EXTRA_SOURCES ${CMAKE_SOURCE_DIR}/release/windows/installer_wix/WixUI_Blender.wxs)
   set(CPACK_WIX_UI_REF "WixUI_Blender")
   set(CPACK_WIX_LIGHT_EXTRA_FLAGS -dcl:medium)
 endif()
 
-set(CPACK_PACKAGE_EXECUTABLES "blender-launcher" "Blender ${MAJOR_VERSION}.${MINOR_VERSION}")
-set(CPACK_CREATE_DESKTOP_LINKS "blender-launcher" "Blender ${MAJOR_VERSION}.${MINOR_VERSION}")
+set(CPACK_PACKAGE_EXECUTABLES "Meld" "Meld ${MAJOR_VERSION}.${MINOR_VERSION}")
+set(CPACK_CREATE_DESKTOP_LINKS "Meld" "Meld ${MAJOR_VERSION}.${MINOR_VERSION}")
 
 include(CPack)
 
@@ -137,7 +137,7 @@ endmacro()
 
 if(APPLE)
   add_package_archive(
-    "${PROJECT_NAME}-${BLENDER_VERSION}-${BUILD_REV}-OSX-${CMAKE_OSX_ARCHITECTURES}"
+    "Meld-${BLENDER_VERSION}-${BUILD_REV}-OSX-${CMAKE_OSX_ARCHITECTURES}"
     "zip"
   )
 elseif(UNIX)
@@ -145,7 +145,7 @@ elseif(UNIX)
   string(TOLOWER ${CMAKE_SYSTEM_NAME} PACKAGE_SYSTEM_NAME)
 
   add_package_archive(
-    "${PROJECT_NAME}-${BLENDER_VERSION}-${BUILD_REV}-${PACKAGE_SYSTEM_NAME}-${CMAKE_SYSTEM_PROCESSOR}"
+    "Meld-${BLENDER_VERSION}-${BUILD_REV}-${PACKAGE_SYSTEM_NAME}-${CMAKE_SYSTEM_PROCESSOR}"
     "tar.xz"
   )
 endif()

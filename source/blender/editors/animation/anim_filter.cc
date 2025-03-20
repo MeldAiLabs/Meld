@@ -344,6 +344,7 @@ bool ANIM_animdata_context_getdata(bAnimContext *ac)
       case SPACE_USERPREF:
       case SPACE_CLIP:
       case SPACE_TOPBAR:
+      case SPACE_SIDEBAR:
       case SPACE_STATUSBAR:
       case SPACE_SPREADSHEET:
         break;

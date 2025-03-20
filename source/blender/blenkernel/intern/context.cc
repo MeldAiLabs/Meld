@@ -991,6 +991,15 @@ SpaceTopBar *CTX_wm_space_topbar(const bContext *C)
   return nullptr;
 }
 
+SpaceSideBar *CTX_wm_space_sidebar(const bContext *C)
+{
+  ScrArea *area = CTX_wm_area(C);
+  if (area && area->spacetype == SPACE_SIDEBAR) {
+    return static_cast<SpaceSideBar *>(area->spacedata.first);
+  }
+  return nullptr;
+}
+
 SpaceSpreadsheet *CTX_wm_space_spreadsheet(const bContext *C)
 {
   ScrArea *area = CTX_wm_area(C);

@@ -499,7 +499,7 @@ void WM_window_title(wmWindowManager *wm, wmWindow *win, const char *title)
     bScreen *screen = WM_window_get_active_screen(win);
     const bool is_single = screen && BLI_listbase_is_single(&screen->areabase);
     ScrArea *area = (screen) ? static_cast<ScrArea *>(screen->areabase.first) : nullptr;
-    const char *name = "Blender";
+    const char *name = "Meld";
     if (is_single && area && area->spacetype != SPACE_EMPTY) {
       name = IFACE_(ED_area_name(area).c_str());
     }
@@ -542,7 +542,7 @@ void WM_window_title(wmWindowManager *wm, wmWindow *win, const char *title)
     win_title.append(fmt::format(" [{}]", filepath));
   }
 
-  win_title.append(fmt::format(" - Blender {}", BKE_blender_version_string()));
+  win_title.append(fmt::format(" - Meld {}", BKE_blender_version_string()));
 
   GHOST_SetTitle(handle, win_title.c_str());
 
@@ -643,6 +643,7 @@ static void wm_window_decoration_style_set_from_theme(const wmWindow *win, const
   /* For main windows, use the top-bar color. */
   if (WM_window_is_main_top_level(win)) {
     UI_SetTheme(SPACE_TOPBAR, RGN_TYPE_HEADER);
+    UI_SetTheme(SPACE_SIDEBAR, RGN_TYPE_HEADER);
   }
   /* For single editor floating windows, use the editor header color. */
   else if (screen && BLI_listbase_is_single(&screen->areabase)) {
@@ -919,7 +920,7 @@ static void wm_window_ghostwindow_ensure(wmWindowManager *wm, wmWindow *win, boo
       win->cursor = WM_CURSOR_DEFAULT;
     }
 
-    wm_window_ghostwindow_add(wm, "Blender", win, is_dialog);
+    wm_window_ghostwindow_add(wm, "Meld", win, is_dialog);
   }
 
   if (win->ghostwin != nullptr) {
@@ -2878,6 +2879,23 @@ void WM_window_screen_rect_calc(const wmWindow *win, rcti *r_rect)
       case GLOBAL_AREA_ALIGN_BOTTOM:
         screen_rect.ymin += height;
         break;
+      // It seems like this has a complex interaction wth the UI. Not as simple
+      // as just subtracting the width from the xmax.
+      // Because this affects the veiew of many different buttons. Probably
+      // best to just not touch this.
+      // It silences the errors though.
+      case GLOBAL_AREA_ALIGN_RIGHT: {
+        // Get width using our new function
+        // int width = ED_area_global_size_x(global_area);
+        // screen_rect.xmax -= width;
+        break;
+      }
+      case GLOBAL_AREA_ALIGN_LEFT: {
+        // Handle left alignment too
+        // int width = ED_area_global_size_x(global_area);
+        // screen_rect.xmin += width;
+        break;
+      }
       default:
         BLI_assert_unreachable();
         break;
@@ -3199,5 +3217,3 @@ void WM_ghost_show_message_box(const char *title,
   BLI_assert(g_system);
   GHOST_ShowMessageBox(g_system, title, message, help_label, continue_label, link, dialog_options);
 }
-
-/** \} */

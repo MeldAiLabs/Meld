@@ -132,6 +132,9 @@ const uchar *UI_ThemeGetColorPtr(bTheme *btheme, int spacetype, int colorid)
         case SPACE_TOPBAR:
           ts = &btheme->space_topbar;
           break;
+        case SPACE_SIDEBAR:
+          ts = &btheme->space_sidebar;
+          break;
         case SPACE_STATUSBAR:
           ts = &btheme->space_statusbar;
           break;

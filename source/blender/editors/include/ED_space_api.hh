@@ -42,6 +42,7 @@ void ED_spacetype_userpref();
 void ED_spacetype_clip();
 void ED_spacetype_statusbar();
 void ED_spacetype_topbar();
+void ED_spacetype_sidebar();
 
 namespace blender::ed::spreadsheet {
 void register_spacetype();

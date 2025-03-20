@@ -3406,8 +3406,11 @@ class WM_MT_splash(Menu):
         # Templates
         col1 = split.column()
         col1.label(text="New File")
-
-        bpy.types.TOPBAR_MT_file_new.draw_ex(col1, context, use_splash=True)
+        sub = col1.row()
+        sub.operator_context = 'INVOKE_DEFAULT'
+        sub.operator("wm.open_mainfile", text="Open...", icon='FILE_FOLDER')
+        col1.operator("wm.recover_last_session", icon='RECOVER_LAST')
+        # bpy.types.TOPBAR_MT_file_new.draw_ex(col1, context, use_splash=True)
 
         # Recent
         col2 = split.column()
@@ -3420,29 +3423,29 @@ class WM_MT_splash(Menu):
         else:
             # Links if no recent files.
             col2_title.label(text="Getting Started")
-
+            # Tutoiral later
             col2.operator("wm.url_open_preset", text="Manual", icon='URL').type = 'MANUAL'
             col2.operator("wm.url_open", text="Tutorials", icon='URL').url = "https://www.blender.org/tutorials/"
-            col2.operator("wm.url_open", text="Support", icon='URL').url = "https://www.blender.org/support/"
-            col2.operator("wm.url_open", text="User Communities", icon='URL').url = "https://www.blender.org/community/"
-            col2.operator("wm.url_open_preset", text="Blender Website", icon='URL').type = 'BLENDER'
+            # col2.operator("wm.url_open", text="Support", icon='URL').url = "https://www.blender.org/support/"
+            # col2.operator("wm.url_open", text="User Communities", icon='URL').url = "https://www.blender.org/community/"
+            # col2.operator("wm.url_open_preset", text="Blender Website", icon='URL').type = 'BLENDER'
 
-        layout.separator()
+        # layout.separator()
 
-        split = layout.split()
+        # split = layout.split()
 
-        col1 = split.column()
-        sub = col1.row()
-        sub.operator_context = 'INVOKE_DEFAULT'
-        sub.operator("wm.open_mainfile", text="Open...", icon='FILE_FOLDER')
-        col1.operator("wm.recover_last_session", icon='RECOVER_LAST')
+        # col1 = split.column()
+        # sub = col1.row()
+        # sub.operator_context = 'INVOKE_DEFAULT'
+        # sub.operator("wm.open_mainfile", text="Open...", icon='FILE_FOLDER')
+        # col1.operator("wm.recover_last_session", icon='RECOVER_LAST')
 
-        col2 = split.column()
+        # col2 = split.column()
 
-        col2.operator("wm.url_open_preset", text="Donate", icon='FUND').type = 'FUND'
-        col2.operator("wm.url_open_preset", text="What's New", icon='URL').type = 'RELEASE_NOTES'
+        # # col2.operator("wm.url_open_preset", text="Donate", icon='FUND').type = 'FUND'
+        # # col2.operator("wm.url_open_preset", text="What's New", icon='URL').type = 'RELEASE_NOTES'
 
-        layout.separator()
+        # layout.separator()
 
         if (not bpy.app.online_access) and bpy.app.online_access_override:
             self.layout.label(text="Running in Offline Mode", icon='INTERNET_OFFLINE')
@@ -3481,18 +3484,18 @@ class WM_MT_splash_about(Menu):
         del _ghost_backend, ghost_backend
 
         col.separator(factor=2.0)
-        col.label(text="Blender is free software")
-        col.label(text="Licensed under the GNU General Public License")
+        # col.label(text="Blender is free software")
+        # col.label(text="Licensed under the GNU General Public License")
 
         col = split.column(align=True)
         col.emboss = 'PULLDOWN_MENU'
-        col.operator("wm.url_open_preset", text="Donate", icon='FUND').type = 'FUND'
+        col.operator("wm.url_open_preset", text="Donate to Blender, the open source project", icon='FUND').type = 'FUND'
         col.operator("wm.url_open_preset", text="What's New", icon='URL').type = 'RELEASE_NOTES'
         col.separator(factor=2.0)
         col.operator("wm.url_open_preset", text="Credits", icon='URL').type = 'CREDITS'
-        col.operator("wm.url_open", text="License", icon='URL').url = "https://www.blender.org/about/license/"
-        col.operator("wm.url_open", text="Blender Store", icon='URL').url = "https://store.blender.org"
-        col.operator("wm.url_open_preset", text="Blender Website", icon='URL').type = 'BLENDER'
+        # col.operator("wm.url_open", text="License", icon='URL').url = "https://www.blender.org/about/license/"
+        # col.operator("wm.url_open", text="Blender Store", icon='URL').url = "https://store.blender.org"
+        # col.operator("wm.url_open_preset", text="Blender Website", icon='URL').type = 'BLENDER'
 
 
 class WM_MT_region_toggle_pie(Menu):

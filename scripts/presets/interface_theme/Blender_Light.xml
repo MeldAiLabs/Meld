@@ -1313,6 +1313,41 @@
         </space>
       </ThemeTopBar>
     </topbar>
+    <sidebar>
+      <ThemeSideBar>
+        <space>
+          <ThemeSpaceGeneric
+            back="#b3b3b3"
+            title="#ffffff"
+            text="#ffffff"
+            text_hi="#ffffff"
+            header="#a6a6a6ff"
+            header_text="#eeeeee"
+            header_text_hi="#ffffff"
+            button="#2f303599"
+            button_title="#ffffff"
+            button_text="#000000"
+            button_text_hi="#000000"
+            navigation_bar="#00000000"
+            execution_buts="#00000000"
+            tab_active="#446499"
+            tab_inactive="#28292d"
+            tab_back="#28292dff"
+            tab_outline="#28292dff"
+            >
+            <panelcolors>
+              <ThemePanelColors
+                header="#ccccccff"
+                back="#ccccccff"
+                sub_back="#0000000f"
+                >
+              </ThemePanelColors>
+            </panelcolors>
+          </ThemeSpaceGeneric>
+        </space>
+      </ThemeSideBar>
+    </sidebar>
+    
     <statusbar>
       <ThemeStatusBar>
         <space>

@@ -991,6 +991,7 @@ class USERPREF_MT_interface_theme_presets(Menu):
         "ThemeStyle",
         "ThemeTextEditor",
         "ThemeTopBar",
+        "ThemeSideBar",
         "ThemeUserInterface",
         "ThemeView3D",
         "ThemeWidgetColors",

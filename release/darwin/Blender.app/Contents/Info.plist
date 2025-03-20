@@ -32,9 +32,9 @@
 		</dict>
 	</array>
 	<key>CFBundleExecutable</key>
-	<string>Blender</string>
+	<string>Meld</string>
 	<key>CFBundleGetInfoString</key>
-	<string>${MACOSX_BUNDLE_LONG_VERSION_STRING}, Blender Foundation</string>
+	<string>${MACOSX_BUNDLE_LONG_VERSION_STRING}, Meld Team</string>
 	<key>CFBundleIconFile</key>
 	<string>blender_icon.icns</string>
 	<key>CFBundleIdentifier</key>
@@ -42,7 +42,9 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>Blender</string>
+	<string>Meld</string>
+	<key>CFBundleDisplayName</key>
+	<string>Meld</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>

@@ -46,13 +46,13 @@
 #include "ED_screen.hh"
 #include "ED_sculpt.hh"
 #include "ED_sequencer.hh"
+#include "ED_sidebar.hh"
 #include "ED_sound.hh"
 #include "ED_space_api.hh"
 #include "ED_transform.hh"
 #include "ED_userpref.hh"
 #include "ED_util.hh"
 #include "ED_uvedit.hh"
-
 #include "io_ops.hh"
 
 void ED_spacetypes_init()
@@ -80,6 +80,7 @@ void ED_spacetypes_init()
   ED_spacetype_clip();
   ED_spacetype_statusbar();
   ED_spacetype_topbar();
+  ED_spacetype_sidebar();
   spreadsheet::register_spacetype();
 
   /* Register operator types for screen and all spaces. */

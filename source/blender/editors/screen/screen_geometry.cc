@@ -239,6 +239,12 @@ void screen_geom_vertices_scale(const wmWindow *win, bScreen *screen)
   WM_window_rect_calc(win, &window_rect);
   WM_window_screen_rect_calc(win, &screen_rect);
 
+  // Only reduce screen width if sidebar is visible
+  if (ED_sidebar_is_visible()) {
+    int sidebar_width = (window_rect.xmax - window_rect.xmin) / 3;
+    screen_rect.xmax -= sidebar_width;
+  }
+
   bool needs_another_pass;
   int max_passes_left = 10; /* Avoids endless loop. Number is rather arbitrary. */
   do {
@@ -276,6 +282,38 @@ void screen_geom_vertices_scale(const wmWindow *win, bScreen *screen)
       case GLOBAL_AREA_ALIGN_BOTTOM:
         area->v2->vec.y = area->v3->vec.y = area->v1->vec.y + height;
         break;
+      case GLOBAL_AREA_ALIGN_RIGHT: {
+        // Get topbar height (if present)
+        int topbar_height = 0;
+        LISTBASE_FOREACH (ScrArea *, top_area, &win->global_areas.areabase) {
+          if (top_area->global->align == GLOBAL_AREA_ALIGN_TOP) {
+            topbar_height = ED_area_global_size_y(top_area);
+            break;
+          }
+        }
+
+        // Sung : problematic?
+        // Position sidebar on right, below topbar
+        area->v1->vec.x = screen_rect.xmax;  // Left edge at screen right boundary
+        area->v2->vec.x = screen_rect.xmax;
+        area->v3->vec.x = window_rect.xmax - 1;  // Right edge at window boundary
+        area->v4->vec.x = window_rect.xmax - 1;
+
+        // Top edge below topbar, bottom at window bottom
+        area->v2->vec.y = area->v3->vec.y = window_rect.ymax - topbar_height;
+        area->v1->vec.y = area->v4->vec.y = window_rect.ymin;
+        break;
+      }
+      case GLOBAL_AREA_ALIGN_LEFT: {
+        // Calculate 1/3 of screen width
+        int width = (window_rect.xmax - window_rect.xmin) / 3;
+
+        // Position from left edge
+        area->v3->vec.x = area->v4->vec.x = window_rect.xmin + width;
+
+        // Height is already set to full window height by the code above the switch
+        break;
+      }
     }
   }
 }

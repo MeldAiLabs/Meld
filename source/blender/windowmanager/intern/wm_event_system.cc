@@ -6500,7 +6500,8 @@ void WM_window_cursor_keymap_status_refresh(bContext *C, wmWindow *win)
   }
 
   /* Keep as-is. */
-  if (ELEM(area->spacetype, SPACE_STATUSBAR, SPACE_TOPBAR)) {
+  // Sung: Should Space_Sidebar be included here?
+  if (ELEM(area->spacetype, SPACE_STATUSBAR, SPACE_SIDEBAR, SPACE_TOPBAR)) {
     return;
   }
   if (ELEM(region->regiontype,

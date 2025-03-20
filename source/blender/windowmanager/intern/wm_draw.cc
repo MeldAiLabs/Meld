@@ -584,6 +584,7 @@ static const char *wm_area_name(ScrArea *area)
     SPACE_NAME(SPACE_USERPREF);
     SPACE_NAME(SPACE_CLIP);
     SPACE_NAME(SPACE_TOPBAR);
+    SPACE_NAME(SPACE_SIDEBAR);
     SPACE_NAME(SPACE_STATUSBAR);
     default:
       return "Unknown Space";

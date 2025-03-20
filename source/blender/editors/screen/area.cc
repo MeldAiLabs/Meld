@@ -3702,6 +3702,32 @@ int ED_area_global_size_y(const ScrArea *area)
   BLI_assert(ED_area_is_global(area));
   return round_fl_to_int(area->global->cur_fixed_height * UI_SCALE_FAC);
 }
+int ED_area_global_size_x(const ScrArea *area)
+{
+  BLI_assert(ED_area_is_global(area));
+
+  // For RIGHT/LEFT aligned areas (sidebar)
+  if (area->global->align == GLOBAL_AREA_ALIGN_RIGHT ||
+      area->global->align == GLOBAL_AREA_ALIGN_LEFT)
+  {
+
+    // Check if sidebar is visible (using the function we created)
+    if (!ED_sidebar_is_visible()) {
+      return 0;  // Return 0 width when sidebar is toggled off
+    }
+
+    // When sidebar is visible, calculate its width
+    // Use window width if available, otherwise use the stored value
+    if (area->winx > 0) {
+      // Return 1/3 of the window width
+      return area->winx / 3;
+    }
+  }
+
+  // For TOP/BOTTOM aligned areas (unchanged behavior)
+  return round_fl_to_int(area->global->cur_fixed_height * UI_SCALE_FAC);
+}
+
 int ED_area_global_min_size_y(const ScrArea *area)
 {
   BLI_assert(ED_area_is_global(area));

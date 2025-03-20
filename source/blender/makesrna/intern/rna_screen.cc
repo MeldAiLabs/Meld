@@ -122,7 +122,7 @@ static int rna_Area_type_get(PointerRNA *ptr)
 
 static void rna_Area_type_set(PointerRNA *ptr, int value)
 {
-  if (ELEM(value, SPACE_TOPBAR, SPACE_STATUSBAR)) {
+  if (ELEM(value, SPACE_TOPBAR, SPACE_SIDEBAR, SPACE_STATUSBAR)) {
     /* Special case: An area can not be set to show the top-bar editor (or
      * other global areas). However it should still be possible to identify
      * its type from Python. */
@@ -202,7 +202,7 @@ static const EnumPropertyItem *rna_Area_ui_type_itemf(bContext *C,
   }
 
   for (; item_from->identifier; item_from++) {
-    if (ELEM(item_from->value, SPACE_TOPBAR, SPACE_STATUSBAR)) {
+    if (ELEM(item_from->value, SPACE_TOPBAR, SPACE_SIDEBAR, SPACE_STATUSBAR)) {
       continue;
     }
 

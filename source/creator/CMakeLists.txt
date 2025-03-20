@@ -348,10 +348,16 @@ else()
     target_link_libraries(blender PRIVATE blender_cpu_check)
   endif()
   if(WIN32)
+    # Rename blender.exe to Meld.exe by setting the output name property
+    set_target_properties(blender PROPERTIES OUTPUT_NAME "Meld")
+    
     add_executable(blender-launcher WIN32
       blender_launcher_win32.c
       ${CMAKE_SOURCE_DIR}/release/windows/icons/winblender.rc
     )
+    # Rename blender-launcher.exe to Meld-launcher.exe
+    set_target_properties(blender-launcher PROPERTIES OUTPUT_NAME "Meld-launcher")
+    
     if(NOT WITH_WINDOWS_EXTERNAL_MANIFEST)
       target_sources(blender-launcher PRIVATE
         ${CMAKE_BINARY_DIR}/blender.exe.manifest
@@ -434,9 +440,9 @@ elseif(APPLE)
       set(TARGETDIR_LIB ${PYTHON_SITE_PACKAGES}/bpy/lib)
     endif()
   else()
-    set(TARGETDIR_VER "Blender.app/Contents/Resources/${BLENDER_VERSION}")
-    set(TARGETDIR_LIB "Blender.app/Contents/Resources/lib")
-    set(TARGETDIR_TEXT "Blender.app/Contents/Resources/text")
+    set(TARGETDIR_VER "Meld.app/Contents/Resources/${BLENDER_VERSION}")
+    set(TARGETDIR_LIB "Meld.app/Contents/Resources/lib")
+    set(TARGETDIR_TEXT "Meld.app/Contents/Resources/text")
   endif()
   set(TARGETDIR_SITE_PACKAGES "${TARGETDIR_VER}/python/lib/python${PYTHON_VERSION}/site-packages")
   # Skip re-linking on CPACK / install.
@@ -746,6 +752,7 @@ if(UNIX AND NOT APPLE)
       DESTINATION "."
     )
 
+
     if(WITH_BLENDER_THUMBNAILER)
       install(
         TARGETS blender-thumbnailer
@@ -1013,11 +1020,12 @@ elseif(WIN32)
     install(
       FILES ${CMAKE_BINARY_DIR}/blender.exe.manifest
       DESTINATION "."
+      RENAME Meld.exe.manifest
     )
     install(
       FILES ${CMAKE_BINARY_DIR}/blender.exe.manifest
       DESTINATION "."
-      RENAME blender-launcher.exe.manifest
+      RENAME Meld-launcher.exe.manifest
     )
   endif()
   windows_install_shared_manifest(
@@ -1604,7 +1612,7 @@ elseif(WIN32)
 elseif(APPLE)
   if(NOT WITH_PYTHON_MODULE)
     # Uppercase name for app bundle.
-    set_target_properties(blender PROPERTIES OUTPUT_NAME Blender)
+    set_target_properties(blender PROPERTIES OUTPUT_NAME Meld)
   endif()
 
   set(OSX_APP_SOURCEDIR ${CMAKE_SOURCE_DIR}/release/darwin/Blender.app)
@@ -1642,11 +1650,11 @@ elseif(APPLE)
   # Give the bundle actual creation/modification date.
   #
   # Note that the directory might not yet exist, which happens when CMAKE is first run.
-  if(NOT EXISTS ${EXECUTABLE_OUTPUT_PATH}/Blender.app)
-    file(MAKE_DIRECTORY ${EXECUTABLE_OUTPUT_PATH}/Blender.app)
+  if(NOT EXISTS ${EXECUTABLE_OUTPUT_PATH}/Meld.app)
+    file(MAKE_DIRECTORY ${EXECUTABLE_OUTPUT_PATH}/Meld.app)
   endif()
   execute_process(
-    COMMAND SetFile -d ${SETFILE_DATE} -m ${SETFILE_DATE} ${EXECUTABLE_OUTPUT_PATH}/Blender.app
+    COMMAND SetFile -d ${SETFILE_DATE} -m ${SETFILE_DATE} ${EXECUTABLE_OUTPUT_PATH}/Meld.app
   )
 
   set(BLENDER_BIN "bin/blender")
@@ -1657,18 +1665,18 @@ elseif(APPLE)
 
   install(
     FILES ${OSX_APP_SOURCEDIR}/Contents/PkgInfo
-    DESTINATION "Blender.app/Contents"
+    DESTINATION "Meld.app/Contents"
   )
 
   install_dir(
     ${OSX_APP_SOURCEDIR}/Contents/Resources
-    "Blender.app/Contents"
+    "Meld.app/Contents"
   )
 
   if(WITH_BLENDER_THUMBNAILER)
     install(
       TARGETS blender-thumbnailer
-      DESTINATION "./Blender.app/Contents/PlugIns"
+      DESTINATION "./Meld.app/Contents/PlugIns"
     )
   endif()
 
@@ -1727,7 +1735,82 @@ elseif(APPLE)
     unset(PYTHON_EXECUTABLE_NAME_ONLY)
     install(
       PROGRAMS ${CMAKE_BINARY_DIR}/release/darwin/scripts/blender-system-info.sh
-      DESTINATION "Blender.app/Contents/Resources"
+      DESTINATION "Meld.app/Contents/Resources"
+    )
+  endif()
+
+  if(NOT WITH_PYTHON_MODULE)
+    install(
+      TARGETS blender
+      BUNDLE DESTINATION "."
+      COMPONENT Runtime
+    )
+
+  
+    if(WITH_BLENDER_THUMBNAILER)
+      install(
+        TARGETS blender-thumbnailer
+        DESTINATION "./Meld.app/Contents/PlugIns"
+      )
+    endif()
+  endif()
+
+  if(PLATFORM_BUNDLED_LIBRARIES AND TARGETDIR_LIB)
+    install(
+      FILES ${PLATFORM_BUNDLED_LIBRARIES}
+      DESTINATION ${TARGETDIR_LIB}
+    )
+  endif()
+
+  if(WITH_VULKAN_BACKEND)
+    install(
+      FILES ${VULKAN_LIBRARY} ${MOLTENVK_LIBRARY}
+      DESTINATION ${TARGETDIR_LIB}
+    )
+  endif()
+
+  # Python.
+  if(WITH_PYTHON AND NOT WITH_PYTHON_MODULE AND NOT WITH_PYTHON_FRAMEWORK)
+    # Copy the python libraries into the install directory.
+    install_dir(
+      ${PYTHON_LIBPATH}/python${PYTHON_VERSION}
+      ${TARGETDIR_VER}/python/lib
+    )
+
+    # Install Python executable.
+    install(
+      PROGRAMS ${PYTHON_EXECUTABLE}
+      DESTINATION ${TARGETDIR_VER}/python/bin
+    )
+
+    # Needed for `distutils/pip`.
+    # Get the last part of the include dir, will be `python{version}{abiflag}`.
+    get_filename_component(_py_inc_suffix ${PYTHON_INCLUDE_DIR} NAME)
+    install(
+      FILES ${PYTHON_INCLUDE_DIR}/pyconfig.h
+      DESTINATION ${TARGETDIR_VER}/python/include/${_py_inc_suffix}
+    )
+    unset(_py_inc_suffix)
+  endif()
+
+  if(WITH_PYTHON_MODULE AND TARGETDIR_BPY)
+    install(
+      TARGETS blender
+      LIBRARY DESTINATION ${TARGETDIR_BPY}
+    )
+  endif()
+
+  if(NOT WITH_PYTHON_MODULE AND WITH_PYTHON AND WITH_PYTHON_INSTALL)
+    get_filename_component(PYTHON_EXECUTABLE_NAME_ONLY ${PYTHON_EXECUTABLE} NAME)
+    configure_file(
+      ${CMAKE_SOURCE_DIR}/release/darwin/scripts/blender-system-info.sh.in
+      ${CMAKE_BINARY_DIR}/release/darwin/scripts/blender-system-info.sh
+      @ONLY
+    )
+    unset(PYTHON_EXECUTABLE_NAME_ONLY)
+    install(
+      PROGRAMS ${CMAKE_BINARY_DIR}/release/darwin/scripts/blender-system-info.sh
+      DESTINATION "Meld.app/Contents/Resources"
     )
   endif()
 
@@ -2026,7 +2109,7 @@ endif()
 # Setup launcher
 
 if(WIN32 AND NOT WITH_PYTHON_MODULE)
-  set(BLENDER_BIN "blender.exe")
+  set(BLENDER_BIN "Meld.exe")
   install(
     TARGETS blender blender-launcher
     COMPONENT Blender
@@ -2043,7 +2126,9 @@ if(WIN32 AND NOT WITH_PYTHON_MODULE)
     blender
     PROPERTIES
       VS_USER_PROPS "blender.Cpp.user.props"
-  )
+  )   
+
+  # RENAME EXECUTABLES - No longer needed as we set OUTPUT_NAME properties
 endif()
 
 # -----------------------------------------------------------------------------
